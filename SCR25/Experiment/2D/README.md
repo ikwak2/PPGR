@@ -1,1 +1,4 @@
-
+- `2D_1D_dataset_prepare.py`
+  - window size : 10s
+  - stride : 1s
+  - 224 x 224
