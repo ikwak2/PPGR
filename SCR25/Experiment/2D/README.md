@@ -1,4 +1,25 @@
-- `2D_1D_dataset_prepare.py`
-  - window size : 10s
-  - stride : 1s
-  - 224 x 224
+- 데이터 전처리 관련
+  - sliding window (10s/1s)
+  - PPG
+    - butterworth filtering (4th order)
+    - 정규화
+      -> 사용자별 amplitude shift 제거
+    - CWT
+      - 다른 window들과도 비교가 용이하게 수정
+      - global clipping + fixed scaling
+  - Temperatrue
+    - 정규화 (공식)
+      -> 사람별로 상대적인 정규화로 수정
+          - window-wise Z-score 
+  - Acceleration
+    - segment 단위 mean/std 정규화
+
+- `ResNet2_CNN1_CWT_SW10-1.py`
+  - best val acc : 66.56%
+  - 과적합 문제 심각
+- `ResNet2_CNN1_CWT_SW10-1_2.py`
+  - 가중치 고정
+    - backbone layer freeze
+  - batch 8 -> 16
+  - dropout(0.3)
+  - best vall acc : 75.47%
