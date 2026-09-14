@@ -73,7 +73,7 @@ We use [WildPPG](https://siplab.org/projects/WildPPG) (Meier, Demirel, and Holz,
 
 Red and infrared PPG are not used. Device temperature is not a skin- or body-temperature measurement. Interpolation aligns the temperature stream with the other inputs; it does not create independent 128-Hz temperature measurements.
 
-detailed explanation is writen on `/data`
+detailed explanation is writen on `about_data.md`
 
 ## Evaluation protocol
 
