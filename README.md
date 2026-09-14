@@ -3,7 +3,7 @@
 Official code for the paper
 *"Context-Conditioned Modality Gating for In-the-Wild Wearable PPG Biometric Verification on Unseen Users"*
 (C. Song, N. Lee, W. Kang, M. Kim, S. Park, B. Oh, Y. Chang, J. Lee†, I.-Y. Kwak†; Chung-Ang University / Hoseo University).
-<!-- TODO: add venue + paper / arXiv link once public -->
+
 
 ## Overview
 
