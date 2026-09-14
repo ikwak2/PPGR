@@ -73,35 +73,7 @@ We use [WildPPG](https://siplab.org/projects/WildPPG) (Meier, Demirel, and Holz,
 
 Red and infrared PPG are not used. Device temperature is not a skin- or body-temperature measurement. Interpolation aligns the temperature stream with the other inputs; it does not create independent 128-Hz temperature measurements.
 
-### Required CSV files
-
-The loader expects the following files:
-
-```text
-DATA_ROOT/
-├── user_1_final.csv
-├── user_2_final.csv
-├── ...
-└── user_16_final.csv
-```
-
-Each CSV must have the following named columns:
-
-```csv
-PPG,temperature,acc_x,acc_y,acc_z
-```
-
-Every data row represents one aligned 128-Hz sample. All five columns are required by the shared loader and window-validity check, including when running PPG-only or PPG+ACC models.
-
-**Preserve the original aligned recording time axis.** The loader obtains time from row positions, not a timestamp column: zero-based row `i` represents time `i / 128` seconds from the protocol's recording origin. Do not pre-crop a CSV to 240–540 minutes, delete rows containing missing values, or concatenate separated valid intervals. Keep missing samples at their original positions. Do not apply the model's PPG filtering or normalization in advance; these are performed by `protocol.py`.
-
-Temperature interpolation must be completed during CSV preparation. The model loader does not perform this resampling; it reads the aligned values and applies `(temperature - 25) / 15`.
-
-**Participant IDs must match the experimental mapping.** The names `user_1`–`user_16` determine both fold membership and participant-specific exclusion intervals. An arbitrary renumbering of the original participants will not reproduce the reported split.
-
-> **Data-preparation prerequisite:** The commands below start from prepared CSVs. This README specifies the loader contract but does not supply the original raw-to-CSV conversion script or a verified original-participant-to-CSV-ID mapping. The official WildPPG download alone is therefore not a ready-to-run input for these commands. Exact reproduction from the original release requires those preparation details as well.
-
-The input contract, missing-window rejection, and fixed exclusions are implemented in [protocol.py](Codes/protocol.py).
+detailed explanation is writen on `/data`
 
 ## Evaluation protocol
 
