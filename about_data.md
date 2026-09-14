@@ -96,7 +96,7 @@ The current training and evaluation code reads only these five signal columns. `
 
 ### Column definitions
 
-| Column | Description | Used by PPGR |
+| Column | Description | Used by PPGR Verification |
 |---|---|---|
 | `Index` | Sample index in the locally prepared file | No |
 | `PPG` | **Wrist green PPG** | Yes |
