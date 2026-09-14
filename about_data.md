@@ -62,6 +62,7 @@ Therefore, the `PPG` column in the prepared CSV files specifically denotes the *
 ## 3. Prepared CSV format
 
 For the experiments in this repository, the WildPPG recordings were organized offline into one CSV file per participant.
+We download dataset in official dataset download `https://polybox.ethz.ch/index.php/s/NWTuyNojU7aya1y` for _mat_ file and converted to _csv_ files for every 16 users.
 
 ### Required CSV files
 
