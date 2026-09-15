@@ -39,6 +39,7 @@ See [protocol.py](Codes/protocol.py) and [three-seed aggregation](Codes/summariz
 ```text
 PPGR/
 ├── Codes/          # Models, protocol, training, evaluation, and aggregation
+├── about_data.md   # Dataset resources and CSV preparation
 ├── LICENSE         # MIT license for the code
 └── README.md
 ```
@@ -73,7 +74,7 @@ We use [WildPPG](https://siplab.org/projects/WildPPG) (Meier, Demirel, and Holz,
 
 Red and infrared PPG are not used. Device temperature is not a skin- or body-temperature measurement. Interpolation aligns the temperature stream with the other inputs; it does not create independent 128-Hz temperature measurements.
 
-detailed explanation is writen on `about_data.md`
+See [about_data.md](about_data.md) for the CSV format, signal alignment, and participant-ID requirements.
 
 ## Evaluation protocol
 
