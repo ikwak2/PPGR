@@ -39,6 +39,29 @@ def load_checkpoint(path):
     return cp
 
 
+def training_code_audit(progress):
+    """Verify the recorded training source, including post-training refactors."""
+    records = {}
+    for name, expected in progress["code_sha256"].items():
+        current = HERE / name
+        current_digest = hashlib.sha256(current.read_bytes()).hexdigest()
+        source = current
+        if current_digest != expected:
+            source = OUTPUT / "training_code_snapshot" / f"{name}.txt"
+        if not source.is_file():
+            raise RuntimeError(f"Recorded training source is unavailable: {source}")
+        digest = hashlib.sha256(source.read_bytes()).hexdigest()
+        if digest != expected:
+            raise RuntimeError(f"Recorded training source hash mismatch: {source}")
+        records[name] = {
+            "verified_source": str(source),
+            "training_sha256": digest,
+            "current_sha256": current_digest,
+            "current_matches_training": current_digest == expected,
+        }
+    return records
+
+
 def macro(payload, horizon):
     cells = payload["calibration_epochs"][str(horizon)]["cells"]
     assert set(cells) == {str(s) for s in DURATIONS}
@@ -211,17 +234,16 @@ def main():
         if key in expected_seed0:
             assert abs(row["offset_0_percent"]-expected_seed0[key]) <= 0.0005
 
+    progress = load_json(OUTPUT/"progress.json")
+    assert progress["status"] == "complete" and progress["completed_jobs"] == 32
+    assert len(execution_audits) == 32
+    training_sources = training_code_audit(progress)
     write_csv("conditions_by_seed.csv",condition_rows)
     write_csv("fold_results.csv",fold_rows)
     write_csv("trajectory_by_seed.csv",trajectory_rows)
     write_csv("paired_delta_by_seed.csv",pair_rows)
     write_csv("paired_delta_by_fold.csv",paired_folds)
-    progress = load_json(OUTPUT/"progress.json")
-    assert progress["status"] == "complete" and progress["completed_jobs"] == 32
-    assert len(execution_audits) == 32
-    for name,expected in progress["code_sha256"].items():
-        assert hashlib.sha256((HERE/name).read_bytes()).hexdigest() == expected, (name,"training code changed during execution")
-    (OUTPUT/"execution_audit.json").write_text(json.dumps(dict(status="pass",new_jobs_checked=len(execution_audits),training_code_sha256=progress["code_sha256"],checks=execution_audits),indent=2)+"\n")
+    (OUTPUT/"execution_audit.json").write_text(json.dumps(dict(status="pass",new_jobs_checked=len(execution_audits),training_code_sha256=progress["code_sha256"],training_source_verification=training_sources,checks=execution_audits),indent=2)+"\n")
     (OUTPUT/"matched_audit.json").write_text(json.dumps(dict(status="pass",models_checked=len(audits),checks=audits),indent=2)+"\n")
     summary=dict(status="complete",created_at=time.strftime("%Y-%m-%dT%H:%M:%SZ",time.gmtime()),seed_offsets=list(ROOTS),aggregation="Within each seed, average 12 cell EERs and 4 folds equally; across seeds, mean and sample SD ddof=1. Paired differences are computed within seed.",source_c00="Existing real-context C00 of the same source and offset",conditions=condition_rows,paired_differences=pair_rows,limitations=["Three seeds are initialization repeats on fixed participant folds, not independent datasets.","Shuffled context is a joint row permutation within each extraction batch, not complete removal of all context information."])
     (OUTPUT/"summary.json").write_text(json.dumps(summary,indent=2)+"\n")
