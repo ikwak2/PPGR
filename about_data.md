@@ -2,7 +2,17 @@
 
 This document describes the WildPPG source dataset and the prepared CSV format expected by the PPGR training and evaluation pipeline.
 
-The original WildPPG data are **not redistributed** with this repository. Users should obtain the dataset from the official WildPPG release and prepare one CSV file per participant before running the experiments.
+The original WildPPG recordings were downloaded as participant-level
+`.mat` files from the official release and prepared as one CSV file
+per participant. Wrist green PPG, temperature, and the three ACC axes
+were aligned to a common 128-Hz timeline and stored in separate
+columns. The low-rate temperature stream was linearly interpolated
+onto this timeline before saving.The original WildPPG recordings were downloaded as participant-level
+`.mat` files from the official release and prepared as one CSV file
+per participant. Wrist green PPG, temperature, and the three ACC axes
+were aligned to a common 128-Hz timeline and stored in separate
+columns. The low-rate temperature stream was linearly interpolated
+onto this timeline before saving.
 
 ---
 
