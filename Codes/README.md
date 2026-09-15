@@ -73,7 +73,7 @@ Stage 2 keeps the encoders, fusion projector, and any temperature residual modul
 
 The [complete ablation commands](../README.md#full-ablation-and-three-seed-aggregation) already cover all folds and seeds. The existing summary pipeline requires **six** model directories: `ppg`, `ppg_acc`, `ppg_acc_temp_mlp`, both gate directories above, and **`baseline`**, which is PPG+ACC+Temp_ECAPA. The five-model main results table does not change this six-model code dependency. PPG+ACC+Temp_ECAPA is unnecessary for training the proposed model alone.
 
-The one-seed summarizer reads each model's `oob_cross_fold_summary.csv` and requires twelve primary-condition rows. Do not invoke it after only one fold or only the three ungated models in the first draft.
+The one-seed summarizer reads each model's `oob_cross_fold_summary.csv` and requires twelve primary-condition rows. Run this summarizer only after all six models have complete four-fold evaluations.
 
 Gate cross-fold files can be regenerated from completed fold evaluations:
 
@@ -134,9 +134,16 @@ done
 
 Repeat with the corresponding main-run result root and `FINAL_SEED_OFFSET` for offsets `5000` and `10000`. Control directories append `_context_free` or `_context_shuffled` to the source's gate directory. They contain the normal gate checkpoints/evaluations plus `fold<F>_context_control.json` metadata. The `real` mode uses the unsuffixed gate directory, so it should not be treated as a separate output location.
 
+
 ### Three-seed context-control reporting
 
-[summarize_gate_context_controls_three_seed.py](summarize_gate_context_controls_three_seed.py) is a post-processing utility for the completed three-seed context-control experiments. It is **not part of the standard training/evaluation workflow** and should be run only after the corresponding context-control outputs and associated run metadata have been generated.
+[summarize_gate_context_controls_three_seed.py](summarize_gate_context_controls_three_seed.py)
+is an optional, experiment-specific post-processing utility. It requires
+the corresponding context-control outputs and associated run metadata.
+
+Context-control experiments and this report are not required to reproduce
+the main framework ablations. Their fold-level and cross-fold outputs can
+be inspected independently of this reporting utility.
 
 The standard reproducibility path is therefore:
 
